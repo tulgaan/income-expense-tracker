@@ -1,0 +1,354 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f4f6f8;
+    color: #172033;
+}
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    background: white;
+    padding: 38px;
+    border-radius: 22px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
+}
+
+.brand {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.brand-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: auto auto 15px;
+}
+
+.brand h1 {
+    font-size: 28px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.brand p {
+    color: #7b8495;
+    margin-top: 7px;
+}
+
+.auth-tabs {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 25px;
+}
+
+.auth-tab {
+    width: 50%;
+    border: 0;
+    background: transparent;
+    padding: 10px;
+    border-radius: 8px;
+    color: #64748b;
+}
+
+.auth-tab.active {
+    background: white;
+    color: #1d4ed8;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.form-control,
+.form-select {
+    min-height: 44px;
+    border-radius: 9px;
+}
+
+#authMessage {
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.navbar {
+    min-height: 70px;
+    background: #101827;
+    color: white;
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: 750;
+    font-size: 20px;
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+}
+
+#userEmail {
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.dashboard-container {
+    max-width: 1500px;
+    padding: 30px;
+    margin: auto;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.page-header h2 {
+    font-weight: 750;
+    margin-bottom: 5px;
+}
+
+.page-header p {
+    margin: 0;
+    color: #778196;
+}
+
+.stat-card {
+    min-height: 135px;
+    padding: 24px;
+    background: white;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 5px 25px rgba(15, 23, 42, 0.05);
+}
+
+.stat-card span {
+    color: #7b8495;
+    font-size: 14px;
+}
+
+.stat-card h3 {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: 750;
+}
+
+.stat-card > i {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    font-size: 20px;
+}
+
+.income-card > i {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.expense-card > i {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.balance-card > i {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 0 5px 25px rgba(15, 23, 42, 0.05);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.panel-header h5 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.panel-header p {
+    margin: 5px 0 0;
+    color: #8a93a4;
+    font-size: 13px;
+}
+
+.chart-box {
+    height: 300px;
+    position: relative;
+}
+
+.filter-select {
+    width: 130px;
+}
+
+.table th {
+    color: #7b8495;
+    font-size: 12px;
+    font-weight: 600;
+    border-bottom-color: #e8ecf2;
+}
+
+.table td {
+    border-bottom-color: #eef1f5;
+    font-size: 14px;
+}
+
+.transaction-type {
+    display: inline-flex;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.type-income {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.type-expense {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.amount-income {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+.amount-expense {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.action-btn {
+    border: 0;
+    background: transparent;
+    padding: 5px 8px;
+}
+
+.edit-btn {
+    color: #2563eb;
+}
+
+.delete-btn {
+    color: #dc2626;
+}
+
+.budget-list {
+    margin-top: 24px;
+}
+
+.budget-item {
+    margin-bottom: 20px;
+}
+
+.budget-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 20px;
+}
+
+.badges {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.badge-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.badge-item i {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.badge-item strong,
+.badge-item span {
+    display: block;
+}
+
+.badge-item span {
+    font-size: 12px;
+    color: #8992a3;
+    margin-top: 3px;
+}
+
+.badge-item.locked {
+    opacity: 0.35;
+    filter: grayscale(1);
+}
+
+.badge-item.unlocked {
+    opacity: 1;
+    filter: none;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 18px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #userEmail {
+        display: none;
+    }
+}

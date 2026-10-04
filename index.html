@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income & Expense Tracker</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div id="authPage" class="auth-page">
+    <div class="auth-card">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <h1>MoneyFlow</h1>
+            <p>Орлого, зарлагаа ухаалгаар удирд</p>
+        </div>
+
+        <div class="auth-tabs">
+            <button id="loginTab" class="auth-tab active">Нэвтрэх</button>
+            <button id="registerTab" class="auth-tab">Бүртгүүлэх</button>
+        </div>
+
+        <form id="loginForm">
+            <div class="mb-3">
+                <label class="form-label">И-мэйл</label>
+                <input id="loginEmail" type="email" class="form-control" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Нууц үг</label>
+                <input id="loginPassword" type="password" class="form-control" required>
+            </div>
+
+            <button class="btn btn-primary w-100">
+                Нэвтрэх
+            </button>
+        </form>
+
+        <form id="registerForm" class="d-none">
+            <div class="mb-3">
+                <label class="form-label">И-мэйл</label>
+                <input id="registerEmail" type="email" class="form-control" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Нууц үг</label>
+                <input id="registerPassword" type="password" class="form-control" minlength="6" required>
+            </div>
+
+            <button class="btn btn-success w-100">
+                Бүртгүүлэх
+            </button>
+        </form>
+
+        <div id="authMessage"></div>
+
+    </div>
+</div>
+
+<div id="appPage" class="d-none">
+
+    <nav class="navbar">
+        <div class="container-fluid px-4">
+            <div class="navbar-brand">
+                <i class="fa-solid fa-wallet"></i>
+                MoneyFlow
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <span id="userEmail"></span>
+
+                <button id="logoutBtn" class="btn btn-outline-light btn-sm">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Гарах
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid dashboard-container">
+
+        <div class="page-header">
+            <div>
+                <h2>Санхүүгийн хяналт</h2>
+                <p>Орлого, зарлага болон төсвөө нэг дор удирдана.</p>
+            </div>
+
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                <i class="fa-solid fa-plus"></i>
+                Гүйлгээ нэмэх
+            </button>
+        </div>
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-md-4">
+                <div class="stat-card income-card">
+                    <div>
+                        <span>Нийт орлого</span>
+                        <h3 id="totalIncome">₮0</h3>
+                    </div>
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card expense-card">
+                    <div>
+                        <span>Нийт зарлага</span>
+                        <h3 id="totalExpense">₮0</h3>
+                    </div>
+                    <i class="fa-solid fa-arrow-trend-down"></i>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card balance-card">
+                    <div>
+                        <span>Үлдэгдэл</span>
+                        <h3 id="balance">₮0</h3>
+                    </div>
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-lg-7">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h5>Сарын орлого ба зарлага</h5>
+                            <p>Сүүлийн саруудын харьцуулалт</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-box">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h5>Зарлагын ангилал</h5>
+                            <p>Энэ сарын зарлагын бүтэц</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-box">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-lg-8">
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h5>Гүйлгээний жагсаалт</h5>
+                            <p>Орлого болон зарлагын бүртгэл</p>
+                        </div>
+
+                        <select id="transactionFilter" class="form-select filter-select">
+                            <option value="all">Бүгд</option>
+                            <option value="орлого">Орлого</option>
+                            <option value="зарлага">Зарлага</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                            <tr>
+                                <th>Төрөл</th>
+                                <th>Ангилал</th>
+                                <th>Дүн</th>
+                                <th>Огноо</th>
+                                <th>Тайлбар</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="transactionTable"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="panel mb-4">
+                    <div class="panel-header">
+                        <div>
+                            <h5>Сарын төсөв</h5>
+                            <p>Ангилал тус бүрийн хязгаар</p>
+                        </div>
+                    </div>
+
+                    <form id="budgetForm">
+                        <div class="mb-3">
+                            <label class="form-label">Ангилал</label>
+
+                            <select id="budgetCategory" class="form-select" required>
+                                <option value="Хоол">Хоол</option>
+                                <option value="Унаа">Унаа</option>
+                                <option value="Үзвэр">Үзвэр</option>
+                                <option value="Бусад">Бусад</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Дээд хязгаар</label>
+                            <input id="budgetAmount" type="number" min="1" class="form-control" required>
+                        </div>
+
+                        <button class="btn btn-dark w-100">
+                            Төсөв хадгалах
+                        </button>
+                    </form>
+
+                    <div id="budgetList" class="budget-list"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h5>Миний тэмдгүүд</h5>
+                            <p>Санхүүгийн амжилтууд</p>
+                        </div>
+                    </div>
+
+                    <div class="badges">
+
+                        <div id="badgeFirst" class="badge-item locked">
+                            <i class="fa-solid fa-star"></i>
+                            <div>
+                                <strong>Анхны бүртгэл</strong>
+                                <span>Эхний гүйлгээгээ бүртгэх</span>
+                            </div>
+                        </div>
+
+                        <div id="badgeMaster" class="badge-item locked">
+                            <i class="fa-solid fa-trophy"></i>
+                            <div>
+                                <strong>Мастер</strong>
+                                <span>Төсвөө хэтрүүлэхгүй байх</span>
+                            </div>
+                        </div>
+
+                        <div id="badgeSaver" class="badge-item locked">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                            <div>
+                                <strong>Хэмнэгч</strong>
+                                <span>Зарлага орлогын 50%-иас бага</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<div class="modal fade" id="transactionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 id="transactionModalTitle" class="modal-title">
+                    Шинэ гүйлгээ
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form id="transactionForm">
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="transactionId">
+
+                    <div class="mb-3">
+                        <label class="form-label">Төрөл</label>
+
+                        <select id="transactionType" class="form-select" required>
+                            <option value="зарлага">Зарлага</option>
+                            <option value="орлого">Орлого</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ангилал</label>
+
+                        <select id="transactionCategory" class="form-select" required>
+                            <option value="Хоол">Хоол</option>
+                            <option value="Унаа">Унаа</option>
+                            <option value="Үзвэр">Үзвэр</option>
+                            <option value="Цалин">Цалин</option>
+                            <option value="Бусад">Бусад</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Мөнгөн дүн</label>
+                        <input id="transactionAmount" type="number" min="1" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Огноо</label>
+                        <input id="transactionDate" type="date" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Тайлбар</label>
+                        <textarea id="transactionDescription"
+                                  class="form-control"
+                                  rows="3"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        Цуцлах
+                    </button>
+
+                    <button class="btn btn-primary">
+                        Хадгалах
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
